@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔬 Reto: El Elemento Misterioso</title>
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --danger: #f5576c;
+            --success: #55efc4;
+            --bg: #f8f9fa;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #2d3436;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0 0 15px;
+            font-size: 2em;
+        }
+
+        .section {
+            padding: 35px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .instruction-box {
+            background: #eef2f7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* TABLAS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+            table-layout: fixed;
+            /* Ayuda a controlar anchos */
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        td {
+            border: 1px solid #dfe6e9;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #b2bec3;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        /* DRAG AND DROP STYLES */
+        .bank-container {
+            background: #f1f2f6;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px dashed #b2bec3;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            min-height: 60px;
+        }
+
+        .draggable-item {
+            background: white;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: grab;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+
+        .drop-zone {
+            min-height: 40px;
+            background: #fafafa;
+            border: 2px dashed #dfe6e9;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+            margin: 0 auto;
+            width: 95%;
+        }
+
+        .drop-zone.drag-over {
+            background: #e3f2fd;
+            border-color: var(--primary);
+        }
+
+        .drop-zone .draggable-item {
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 4px;
+            background: #eef2f7;
+            border: none;
+            color: #333;
+        }
+
+        /* ANEXOS GRID */
+        .anexo-container {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 10px;
+            background: white;
+        }
+
+        .anexo-grid {
+            display: grid;
+            gap: 2px;
+            background: #dfe6e9;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px auto;
+            max-width: 100%;
+            grid-template-columns: repeat(18, minmax(40px, 1fr));
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            border: 1px solid #777;
+            min-height: 45px;
+            padding: 2px;
+            font-weight: bold;
+        }
+
+        .cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.85rem;
+            padding: 2px;
+            background: transparent;
+        }
+
+        .cell-empty {
+            background: transparent;
+            border: none;
+        }
+
+        .riddle-card {
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .mystery-box {
+            background: linear-gradient(135deg, #fff5f5, #ffe0e0);
+            border: 2px dashed var(--danger);
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .mystery-input {
+            font-size: 1.5rem !important;
+            text-align: center;
+            width: 60% !important;
+            color: var(--danger);
+            font-weight: bold;
+            padding: 15px !important;
+        }
+
+        .submit-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            border-radius: 35px;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+            margin: 20px auto;
+            display: block;
+        }
+
+        #results-panel {
+            display: none;
+            padding: 40px;
+            background: #2d3436;
+            color: white;
+            text-align: center;
+        }
+
+        .v-code {
+            font-family: 'Courier New', monospace;
+            font-size: 2.5rem;
+            color: #fab1a0;
+            margin: 20px 0;
+            letter-spacing: 5px;
+            border: 2px solid #fab1a0;
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 10px;
+        }
+
+        .download-btn {
+            background: white;
+            color: #2d3436;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #dfe6e9;
+        }
+
+        @media (max-width: 768px) {
+            .anexo-grid {
+                grid-template-columns: repeat(18, minmax(30px, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🔬 Reto: El Elemento Misterioso</h1>
+            <p>Parte III - Tabla Periódica y Propiedades</p>
+        </div>
+
+        <div class="section">
+            <!-- Ejercicio 6: Drag & Drop Ubicación -->
+            <h3 style="color: var(--primary);">6. Ubicación por familias y periodos</h3>
+            <div class="instruction-box">
+                Arrastra la respuesta correcta del banco a la casilla correspondiente.
+            </div>
+
+            <!-- Banco de Respuestas Ej 6 -->
+            <div class="bank-container" id="bank-ex6" ondrop="dropToBank(event)" ondragover="allowDrop(event)">
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-1" data-val="periodo 2">
+                    Periodo 2</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-2" data-val="periodo 1">
+                    Periodo 1</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-3" data-val="grupo 1">
+                    Metales Alcalinos (G1)</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-4" data-val="periodo 3">
+                    Periodo 3</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-5" data-val="periodo 6">
+                    Periodo 6</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-6" data-val="grupo 18">
+                    Gases Nobles (G18)</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-7"
+                    data-val="halogenos grupo 17">Halógenos (G17)</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-8" data-val="periodo 5">
+                    Periodo 5</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-9" data-val="grupo 5">
+                    Grupo 5</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d6-10" data-val="periodo 4">
+                    Periodo 4</div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="50%">Enunciado</th>
+                        <th width="50%">Arrastra aquí</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Contiene a los elementos C, N y O</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="periodo 2"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Comienza con helio</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="periodo 1"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Metales alcalinos</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="grupo 1"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Termina con argón</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="periodo 3"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>La fila comienza con cesio</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="periodo 6"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Los gases nobles</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="grupo 18"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Contiene F, Cl, Br y I</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="halogenos grupo 17"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Comienza con rubidio</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="periodo 5"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Se encuentran el V, Nb, Ta</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="grupo 5"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Contiene al Ti, Fe, Cu, Se</td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="periodo 4"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Ejercicio 7: Clasificación y Justificación Drag & Drop -->
+            <h3 style="color: var(--secondary); margin-top: 35px;">7. Clasificación de elementos</h3>
+            <div class="instruction-box">
+                Selecciona la categoría y <strong>arrastra la justificación</strong> correcta del banco.
+            </div>
+
+            <!-- Banco de Justificaciones Ej 7 -->
+            <div class="bank-container" id="bank-ex7" ondrop="dropToBank(event)" ondragover="allowDrop(event)">
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-1"
+                    data-val="semiconductor">Semiconductor / Brillo metálico</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-2" data-val="brillo">
+                    Brillo característico</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-3" data-val="transicion">
+                    Es metal de transición</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-4"
+                    data-val="mal conductor">Mal conductor</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-5" data-val="opaco">Opaco
+                    / Quebradizo</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-6"
+                    data-val="aislante termico">Aislante térmico</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-7" data-val="conductor">
+                    Conductor / Maleable</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-8" data-val="opacidad">
+                    Opacidad</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-9" data-val="reactivo">
+                    Reacciona con agua / Brillo</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-10"
+                    data-val="conductividad">Conductividad</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-11" data-val="gas">Gas /
+                    Aislante</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-12" data-val="ductil">
+                    Dúctil / Conductor</div>
+                <div class="draggable-item" draggable="true" ondragstart="drag(event)" id="d7-13" data-val="intermedio">
+                    Propiedades intermedias</div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="30%">Elemento</th>
+                        <th width="30%">Categoría</th>
+                        <th width="40%">Arrastra Justificación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Filas de Ej 7 -->
+                    <tr>
+                        <td>Boro</td>
+                        <td><select data-ans="metaloide">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="semiconductor"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Brillante</td>
+                        <td><select data-ans="metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-ans="brillo">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Grupo 7</td>
+                        <td><select data-ans="metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="transicion"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Selenio</td>
+                        <td><select data-ans="no metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="mal conductor"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Azufre</td>
+                        <td><select data-ans="no metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-ans="opaco">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>No conduce calor</td>
+                        <td><select data-ans="no metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="aislante termico"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Plata</td>
+                        <td><select data-ans="metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="conductor"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>No brillante</td>
+                        <td><select data-ans="no metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="opacidad"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Calcio</td>
+                        <td><select data-ans="metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="reactivo"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Buen conductor</td>
+                        <td><select data-ans="metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="conductividad"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Nitrógeno</td>
+                        <td><select data-ans="no metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-ans="gas">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Aluminio</td>
+                        <td><select data-ans="metal">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)" data-ans="ductil">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Arsénico</td>
+                        <td><select data-ans="metaloide">
+                                <option value="">Select...</option>
+                                <option value="metal">Metal</option>
+                                <option value="no metal">No Metal</option>
+                                <option value="metaloide">Metaloide</option>
+                            </select></td>
+                        <td>
+                            <div class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"
+                                data-ans="intermedio"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Ejercicio 8 -->
+            <h3 style="color: var(--accent); margin-top: 35px;">8. Identificación por configuración electrónica</h3>
+            <div class="instruction-box">
+                Configuración: <strong>1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰ 4p¹</strong>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="riddle-card">
+                    <strong>a. Periodo:</strong>
+                    <input type="number" data-ans="4">
+                </div>
+                <div class="riddle-card">
+                    <strong>b. Bloque:</strong>
+                    <input type="text" data-ans="p">
+                </div>
+                <div class="riddle-card">
+                    <strong>c. Familia (Acepta múltiples respuestas):</strong>
+                    <!-- Se ha modificado data-ans para incluir variantes separadas por | -->
+                    <input type="text" data-ans="térreos|terreos|grupo 13|familia 3|familia iiia">
+                </div>
+                <div class="riddle-card">
+                    <strong>d. Ubicación:</strong>
+                    <p style="font-size: 0.85em;">(Marca en Anexo 1)</p>
+                </div>
+                <div class="riddle-card" style="grid-column: 1 / -1;">
+                    <strong>e. Elemento:</strong>
+                    <input type="text" data-ans="galio">
+                </div>
+            </div>
+
+            <!-- Anexo 1 -->
+            <h4 style="color: var(--primary);">📋 Anexo 1</h4>
+            <div class="anexo-container">
+                <div class="anexo-grid" id="anexo1"></div>
+            </div>
+
+            <!-- Ejercicio 9: Nombre y Símbolo Separados (COMPLETO) -->
+            <h3 style="color: var(--danger); margin-top: 35px;">9. Resolución de ubicación en tabla periódica</h3>
+            <div class="instruction-box">
+                Escribe en los paréntesis el número solicitado y en las líneas el nombre y símbolo del elemento que
+                corresponda
+                según las pistas de grupo, periodo o configuración terminal. Utiliza el Anexo 2 como referencia.
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th width="10%">#</th>
+                        <th width="50%">Pista</th>
+                        <th width="20%">Nombre</th>
+                        <th width="20%">Símbolo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es un elemento de transición del periodo 5</td>
+                        <td><input type="text" data-ans="itrio" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="y" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es un metal alcalinotérreo</td>
+                        <td><input type="text" data-ans="berilio" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="be" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Elemento cuya configuración electrónica termina en 3d⁹</td>
+                        <td><input type="text" data-ans="cobre" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="cu" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es un halógeno</td>
+                        <td><input type="text" data-ans="fluor|flúor" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="f" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es un gas noble</td>
+                        <td><input type="text" data-ans="helio|neon|neón|argon|argón" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="he|ne|ar" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es el elemento cuya configuración terminal es 6p¹</td>
+                        <td><input type="text" data-ans="talio" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="tl" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es el elemento cuya configuración terminal es 7p¹</td>
+                        <td><input type="text" data-ans="nihonio" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="nh" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es un elemento alcalino perteneciente al período 2</td>
+                        <td><input type="text" data-ans="litio" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="li" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es un elemento de transición interna, es un lantánido</td>
+                        <td><input type="text" data-ans="cerio|lantano" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="ce|la" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es el elemento de transición del grupo 5</td>
+                        <td><input type="text" data-ans="vanadio" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="v" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es el elemento que tiene Z=92 y es radiactivo</td>
+                        <td><input type="text" data-ans="uranio" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="u" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es el elemento que pertenece a la familia del carbono</td>
+                        <td><input type="text" data-ans="carbono" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="c" placeholder="Símbolo"></td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Es el elemento de transición del grupo 9</td>
+                        <td><input type="text" data-ans="cobalto" placeholder="Nombre"></td>
+                        <td><input type="text" data-ans="co" placeholder="Símbolo"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Anexo 2 -->
+            <h4 style="color: var(--primary);">📋 Anexo 2 - Tabla con Pistas Numéricas</h4>
+            <div class="instruction-box">
+                Esta tabla muestra algunos números atómicos (Z) y grupos para ayudarte a ubicar elementos. Los números
+                representan Z (número atómico).
+            </div>
+            <div class="anexo-container">
+                <div class="anexo-grid" id="anexo2"></div>
+            </div>
+
+            <!-- Ejercicio 10 (COMPLETO) -->
+            <h3 style="color: var(--primary); margin-top: 35px;">10. Ubicación en tabla anexa</h3>
+            <div class="instruction-box">
+                Coloca el símbolo del elemento correspondiente en el recuadro adecuado según la información
+                proporcionada
+                (configuraciones, números cuánticos, familias o periodos). Utiliza el Anexo 3.
+            </div>
+
+            <div
+                style="background: white; padding: 20px; border-radius: 8px; border: 2px solid var(--accent); margin-bottom: 20px;">
+                <p style="margin: 5px 0;"><strong>a)</strong> 1s² → Escribe el símbolo en la casilla correspondiente</p>
+                <p style="margin: 5px 0;"><strong>b)</strong> [Kr] 5s² 4d¹⁰ 5p³ → Escribe el símbolo en la casilla
+                    correspondiente</p>
+                <p style="margin: 5px 0;"><strong>c)</strong> Familia 10 o VIIIB, período 4 → Escribe el símbolo en la
+                    casilla correspondiente</p>
+                <p style="margin: 5px 0;"><strong>d)</strong> n=2, l=1, m=-1, s=+½ → Escribe el símbolo en la casilla
+                    correspondiente</p>
+            </div>
+
+            <h4 style="color: var(--primary);">📋 Anexo 3 - Tabla para Completar</h4>
+            <div class="instruction-box">
+                Completa esta tabla periódica vacía con los símbolos de los elementos según las indicaciones del
+                ejercicio 10.
+            </div>
+            <div class="anexo-container">
+                <div class="anexo-grid" id="anexo3"></div>
+            </div>
+
+            <!-- Acertijos -->
+            <h3 style="color: var(--secondary); margin-top: 35px;">11. Resolución de acertijos periódicos</h3>
+            <div class="instruction-box">
+                Identifica los elementos o categorías descritos en los acertijos y escribe su solución.
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="riddle-card"><strong>a.</strong> "Me encuentras en los gases nobles, invisible y ligero,
+                    hago flotar globos y soy primero en mi grupo entero" <input type="text" data-ans="helio"></div>
+                <div class="riddle-card"><strong>b.</strong> "Soy el único metal líquido a temperatura ambiente,
+                    plateado y brillante, con símbolo de planeta, ¿qué elemento soy?" <input type="text"
+                        data-ans="mercurio"></div>
+                <div class="riddle-card"><strong>c.</strong> "No soy metal ni gas noble, pero conduzco a veces como
+                    cobre. Estoy en la frontera, ¿qué categoría soy?" <input type="text" data-ans="metaloide"></div>
+                <div class="riddle-card"><strong>d.</strong> "Vivo en la primera columna, reacciono con el agua con
+                    emoción; me gusta perder un electrón. ¿Qué nombre tiene mi familia?" <input type="text"
+                        data-ans="metales alcalinos"></div>
+                <div class="riddle-card"><strong>e.</strong> "Estoy casi al final, huelo a estabilidad; mi capa está
+                    completa, poca reactividad. ¿Quiénes somos?" <input type="text" data-ans="gases nobles"></div>
+                <div class="riddle-card"><strong>f.</strong> "Camino por la escalera quebrada entre metales y no
+                    metales; a veces conduzco, a veces no. ¿Qué categoría soy?" <input type="text"
+                        data-ans="metaloides"></div>
+            </div>
+
+            <!-- Elemento Misterioso -->
+            <div class="section">
+                <h2 class="section-title">🎭 12. Pistas para encontrar el elemento misterioso</h2>
+                <div class="mystery-box">
+                    <p>• Soy un gas incoloro e inodoro, muy ligero, que no reacciona fácilmente con nadie (ni siquiera
+                        con los más intensos halógenos).</p>
+                    <p>• Pertenezco a la familia de los gases nobles, en el bloque p.</p>
+                    <p>• Mi electronegatividad es prácticamente nula, pero soy famoso porque literalmente no me engancho
+                        con nadie.</p>
+                    <p>• En la atmósfera terrestre me encuentras en mucha menor proporción que a mis hermanos, soy casi
+                        un fantasma.</p>
+                    <p>• Mi nombre proviene del griego y significa <strong>"oculto"</strong> o
+                        <strong>"escondido"</strong>, porque durante mucho tiempo nadie me detectaba.</p>
+                    <h3>¿QUÉ ELEMENTO SOY?</h3>
+                    <input type="text" id="mystery-input" class="mystery-input" data-ans="kripton|kriptón">
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button class="submit-btn" onclick="evaluateQuiz()">🎯 Finalizar y Verificar Todo</button>
+            </div>
+        </div>
+
+        <div id="results-panel">
+            <h2>🎉 Resultado</h2>
+            <p>Calificación: <span id="grade-val" style="font-size:2rem; font-weight:bold;">0</span>/100</p>
+            <!-- Puntuación de integridad invisible en pantalla, solo en código -->
+            <p>Código de Verificación: <span id="verification-code" class="v-code">---</span></p>
+            <button onclick="downloadReport()" class="download-btn">💾 Descargar Reporte Completo (.txt)</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // SISTEMA ANTITRAMPAS (Invisble)
+        // ============================================
+        let stats = {
+            pastes: 0,
+            tabs: 0,
+            rapid: 0,
+            lastIn: Date.now(),
+            start: Date.now(),
+            keys: 0,
+            backspaces: 0
+        };
+
+        document.addEventListener('paste', (e) => {
+            stats.pastes++;
+            console.log("Paste detected");
+        });
+
+        window.addEventListener('blur', () => {
+            stats.tabs++;
+            console.log("Tab switch detected");
+        });
+
+        document.addEventListener('keydown', (e) => {
+            stats.keys++;
+            if (e.key === 'Backspace') {
+                stats.backspaces++;
+            }
+        });
+
+        document.addEventListener('input', (e) => {
+            const now = Date.now();
+            // Si escribe muy rápido (< 200ms entre caracteres es sospechoso para humanos en campos complejos)
+            if (now - stats.lastIn < 200) {
+                stats.rapid++;
+            }
+            stats.lastIn = now;
+        });
+
+        // --- LÓGICA DRAG AND DROP ---
+        function allowDrop(ev) {
+            ev.preventDefault();
+            if (ev.target.classList.contains('drop-zone') || ev.target.classList.contains('bank-container')) {
+                ev.target.classList.add('drag-over');
+            }
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+            ev.target.style.opacity = '0.5';
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            var data = ev.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+
+            if (ev.target.classList.contains('drop-zone')) {
+                if (ev.target.children.length === 0) {
+                    draggedElement.style.opacity = '1';
+                    draggedElement.style.margin = '0';
+                    ev.target.appendChild(draggedElement);
+                }
+            }
+        }
+
+        function dropToBank(ev) {
+            ev.preventDefault();
+            ev.target.classList.remove('drag-over');
+            var data = ev.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+
+            if (ev.target.classList.contains('bank-container')) {
+                draggedElement.style.opacity = '1';
+                draggedElement.style.margin = '';
+                ev.target.appendChild(draggedElement);
+            }
+        }
+
+        document.addEventListener('dragleave', function (ev) {
+            if (ev.target.classList.contains('drop-zone') || ev.target.classList.contains('bank-container')) {
+                ev.target.classList.remove('drag-over');
+            }
+        });
+
+        document.addEventListener('dragend', function (ev) {
+            ev.target.style.opacity = '1';
+        });
+
+
+        // --- GENERACIÓN DE TABLAS (ANEXOS) ---
+        const tableTemplate = [
+            [0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0],
+            ['2', 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, '44', 0, 0, 0, 0, 0],
+            [0, '6', -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 0, 0, 0, 0, '8', 0],
+            [0, 0, '15', '28', 0, 0, 0, 0, 0, 0, '5', 0, 0, '27', 0, 0, 0, '4'],
+            [0, 0, 0, 0, '3', 0, 0, 0, 0, 0, 0, 0, 0, '55', 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, '21', 0, 0, '24', '13', 0, 0, 0, 0, 0, 0],
+            ['1', 0, '16', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '40', 0, 0],
+            [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            [-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
+            [-1, -1, 0, 0, '22', 0, 0, '30', 0, 0, 0, 0, 0, 0, 0, 0, -1, -1]
+        ];
+
+        function renderTable(containerId, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            tableTemplate.forEach((row, rowIndex) => {
+                row.forEach((val, colIndex) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    if (val === -1) {
+                        cell.classList.add('cell-empty');
+                        cell.style.border = 'none';
+                    } else {
+                        if (type === 'static') {
+                            cell.innerText = (typeof val === 'string' || val > 0) ? val : '';
+                        } else {
+                            cell.innerHTML = `<input type="text" class="anexo-input" maxlength="2" data-coord="${rowIndex}-${colIndex}">`;
+                        }
+                    }
+                    container.appendChild(cell);
+                });
+            });
+        }
+
+        renderTable('anexo1', 'input');
+        renderTable('anexo2', 'static');
+        renderTable('anexo3', 'input');
+
+        // --- VARIABLES GLOBALES PARA REPORTE ---
+        let finalGrade = 0;
+        let finalIntegrity = 100;
+        let riskLevel = "low";
+        let verificationCode = "";
+        let riskDigit = 0;
+
+        // --- EVALUACIÓN ---
+        function evaluateQuiz() {
+            let correct = 0;
+            let total = 0;
+
+            // 1. Inputs
+            const inputs = document.querySelectorAll('input[data-ans], select[data-ans]');
+            inputs.forEach(input => {
+                total++;
+                let userVal = input.value.toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                let correctOpts = input.getAttribute('data-ans').toLowerCase().split('|');
+                let isCorrect = correctOpts.some(opt => {
+                    let cleanOpt = opt.trim();
+                    return userVal === cleanOpt || (userVal && userVal.includes(cleanOpt));
+                });
+
+                if (isCorrect && userVal !== "") {
+                    correct++;
+                    input.style.backgroundColor = '#d4edda';
+                    input.style.borderColor = '#28a745';
+                } else if (userVal !== "") {
+                    input.style.backgroundColor = '#f8d7da';
+                    input.style.borderColor = '#dc3545';
+                }
+            });
+
+            // 2. Drag & Drop
+            const dropZones = document.querySelectorAll('.drop-zone[data-ans]');
+            dropZones.forEach(zone => {
+                total++;
+                let correctVal = zone.getAttribute('data-ans');
+                let child = zone.firstElementChild;
+                if (child) {
+                    let draggedVal = child.getAttribute('data-val');
+                    if (draggedVal === correctVal) {
+                        correct++;
+                        child.style.backgroundColor = '#d4edda';
+                        child.style.border = '1px solid #28a745';
+                        zone.style.borderColor = '#28a745';
+                    } else {
+                        child.style.backgroundColor = '#f8d7da';
+                        child.style.border = '1px solid #dc3545';
+                        zone.style.borderColor = '#dc3545';
+                    }
+                } else {
+                    zone.style.borderColor = '#dfe6e9';
+                }
+            });
+
+            // 3. Anexos
+            const anexo1Ans = { '3-12': 'ga' };
+            const anexo3Ans = { '0-0': 'h', '4-14': 'sb', '3-9': 'ni', '1-12': 'b' };
+
+            function checkAnexo(anexoId, answers) {
+                const inputs = document.querySelectorAll(`#${anexoId} input`);
+                inputs.forEach(inp => {
+                    let coord = inp.getAttribute('data-coord');
+                    let val = inp.value.toLowerCase().trim();
+                    if (answers[coord]) {
+                        total++;
+                        if (val === answers[coord]) {
+                            correct++;
+                            inp.style.backgroundColor = '#d4edda';
+                        } else if (val !== '') {
+                            inp.style.backgroundColor = '#f8d7da';
+                        }
+                    } else if (val !== '') {
+                        inp.style.backgroundColor = '#f8d7da';
+                    }
+                });
+            }
+            checkAnexo('anexo1', anexo1Ans);
+            checkAnexo('anexo3', anexo3Ans);
+
+            // CALCULO FINAL
+            finalGrade = Math.round((correct / total) * 100);
+
+            // CALCULO DE INTEGRIDAD (Invisible)
+            finalIntegrity = 100;
+            if (stats.pastes > 2) finalIntegrity -= (stats.pastes * 5); // 5 pts por paste
+            if (stats.tabs > 5) finalIntegrity -= 15;
+            if (stats.tabs > 15) finalIntegrity -= 20;
+            if (stats.rapid > 10) finalIntegrity -= 30;
+
+            // Backspace check (escritura natural tiene errores)
+            if (stats.keys > 50 && stats.backspaces === 0) finalIntegrity -= 20;
+
+            finalIntegrity = Math.max(0, finalIntegrity);
+
+            // Determinar riesgo (0=bajo, 1=medio, 2=alto)
+            riskDigit = finalIntegrity >= 70 ? 0 : (finalIntegrity >= 40 ? 1 : 2);
+            riskLevel = riskDigit === 0 ? "BAJO" : (riskDigit === 1 ? "MEDIO" : "ALTO");
+
+            // GENERAR CÓDIGO ABC-DEFGH
+            const timeCode = Date.now().toString().slice(-4);
+            verificationCode = `${finalIntegrity.toString().padStart(3, '0')}-${riskDigit}${timeCode}`;
+
+            document.getElementById('grade-val').innerText = finalGrade;
+            document.getElementById('verification-code').innerText = verificationCode;
+            document.getElementById('results-panel').style.display = 'block';
+            document.querySelector('.submit-btn').style.display = 'none';
+
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // --- FUNCIÓN DE DESCARGA DE REPORTE TXT ---
+        function downloadReport() {
+            const date = new Date().toLocaleString();
+            const content = `
+REPORTE DE EVALUACIÓN - EL ELEMENTO MISTERIOSO
+================================================
+Fecha: ${date}
+Estudiante: (Completar nombre)
+
+RESULTADOS VISIBLES
+-------------------
+Calificación Final: ${finalGrade}/100
+Código de Verificación: ${verificationCode}
+
+------------------------------------------------
+        DATOS DE INTEGRIDAD (USO DOCENTE)
+   (No compartir esta sección con el estudiante)
+------------------------------------------------
+Puntuación de Integridad: ${finalIntegrity}/100
+Nivel de Riesgo: ${riskLevel} (Dígito: ${riskDigit})
+
+DETALLES DEL COMPORTAMIENTO:
+- Eventos de Pegar (Paste): ${stats.pastes}
+- Cambios de Ventana (Tabs): ${stats.tabs}
+- Escritura Rápida (Rapid Input): ${stats.rapid}
+- Total Teclas Presionadas: ${stats.keys}
+- Teclas de Borrado (Backspaces): ${stats.backspaces}
+- Tiempo Total: ${Math.round((Date.now() - stats.start) / 1000)} segundos
+
+Interpretación:
+> 70 puntos: Comportamiento normal
+40-69 puntos: Revisión recomendada
+< 40 puntos: Alta probabilidad de trampa
+================================================
+`.trim();
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Reporte_ElementoMisterioso_${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+
+</body>
+
+</html>
