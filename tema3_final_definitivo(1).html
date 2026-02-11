@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔬 Tema 3: Enlaces Químicos - Actividad Completa</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>">
+    <style>
+        :root { --primary: #1e3a8a; --secondary: #3b82f6; --accent: #f59e0b; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: #1e293b; padding: 20px; line-height: 1.6; margin: 0; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; position: relative; }
+        .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 40px; text-align: center; }
+        .header h1 { margin: 0; font-size: 2.2rem; }
+        .header p { margin: 10px 0 0; opacity: 0.95; }
+        
+        .reset-btn { position: absolute; top: 20px; right: 20px; background: rgba(220, 38, 38, 0.9); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .reset-btn:hover { transform: scale(1.05); }
+
+        .section { padding: 35px; border-bottom: 2px solid #e2e8f0; }
+        .section-title { color: var(--primary); font-size: 1.6rem; border-left: 5px solid var(--accent); padding-left: 15px; margin-bottom: 25px; font-weight: 700; }
+        .instruction { background: #eff6ff; border: 1px solid #dbeafe; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: 500; }
+        .example-box { background: #fffbeb; border: 1px solid #fcd34d; padding: 15px; border-radius: 8px; margin: 20px 0; color: #92400e; font-size: 0.95rem; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; }
+        th { background: #f1f5f9; color: var(--primary); padding: 14px; border: 1px solid #e2e8f0; font-weight: 600; text-align: center; }
+        td { border: 1px solid #e2e8f0; padding: 10px; text-align: center; vertical-align: middle; }
+        td.compound { font-weight: bold; background: #f8fafc; }
+        
+        textarea, input, select { width: 95%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 1rem; transition: 0.3s; }
+        input:focus, select:focus, textarea:focus { outline: 2px solid var(--secondary); border-color: transparent; }
+        textarea { min-height: 80px; resize: vertical; }
+        
+        .correct-input { background-color: #dcfce7 !important; border-color: #22c55e !important; border-width: 2px !important; }
+        .incorrect-input { background-color: #fee2e2 !important; border-color: #ef4444 !important; border-width: 2px !important; }
+
+        /* Drag & Drop */
+        .drag-container { display: flex; flex-wrap: wrap; gap: 10px; background: #e2e8f0; padding: 20px; border-radius: 8px; justify-content: center; margin: 20px 0; min-height: 80px; }
+        .draggable { background: white; padding: 10px 16px; border: 2px solid #cbd5e1; border-radius: 8px; cursor: grab; font-size: 0.9rem; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.05); transition: 0.2s; user-select: none; }
+        .draggable:active { cursor: grabbing; transform: scale(0.98); }
+        .draggable:hover { border-color: var(--secondary); transform: translateY(-2px); }
+        
+        .drop-zone { min-height: 55px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 6px; display: flex; align-items: center; justify-content: center; padding: 8px; transition: 0.2s; }
+        .drop-zone.drag-over { background: #dbeafe; border-color: #3b82f6; border-style: solid; }
+        .drop-zone .draggable { width: 100%; margin: 0; border-style: solid; }
+
+        /* Teclado Químico */
+        #symbol-bar, #symbol-bar-part3 { background: #e0f2fe; border: 2px solid #bae6fd; padding: 12px; border-radius: 8px; margin: 20px 0; display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; position: sticky; bottom: 10px; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .sym-btn { background: white; border: 2px solid #cbd5e1; color: #1e293b; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: 0.15s; min-width: 45px; user-select: none; }
+        .sym-btn:hover { background: var(--secondary); color: white; border-color: var(--secondary); transform: translateY(-1px); }
+        .sym-btn:active { transform: scale(0.95); }
+
+        .lewis-input { background: #fef3c7; border: 2px solid #fbbf24; margin: 10px 0; padding: 8px; border-radius: 6px; }
+        .lewis-label { font-weight: bold; color: var(--primary); margin-top: 15px; display: block; }
+
+        .btn-submit { display: block; width: 100%; padding: 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; font-size: 1.3rem; font-weight: bold; cursor: pointer; border-radius: 10px; transition: 0.3s; box-shadow: 0 5px 15px rgba(30, 58, 138, 0.3); }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(30, 58, 138, 0.4); }
+        .btn-submit:active { transform: translateY(0); }
+        
+        #results-panel { display: none; padding: 50px; background: linear-gradient(135deg, #0f172a, #1e293b); color: white; text-align: center; }
+        #results-panel h2 { font-size: 2rem; margin-bottom: 30px; }
+        .grade-display { font-size: 4rem; color: #fbbf24; font-weight: bold; margin: 20px 0; text-shadow: 0 0 20px rgba(251, 191, 36, 0.5); }
+        .v-code { font-family: 'Courier New', monospace; font-size: 2.5rem; color: #fbbf24; border: 3px dashed #fbbf24; padding: 20px; display: inline-block; margin: 25px 0; letter-spacing: 3px; background: rgba(255,255,255,0.05); border-radius: 10px; }
+        .download-btn { background: #22c55e; color: white; border: none; padding: 15px 40px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.3s; }
+        .download-btn:hover { background: #16a34a; transform: translateY(-2px); }
+
+        .autosave { position: fixed; bottom: 20px; right: 20px; background: #22c55e; color: white; padding: 12px 20px; border-radius: 25px; font-size: 0.9rem; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 1000; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="reset-btn" onclick="resetAll()">🔄 Reiniciar</button>
+            <h1>🔬 Tema 3: Enlaces Químicos</h1>
+            <p>Análisis, clasificación y representación de enlaces químicos</p>
+        </div>
+
+        <!-- PARTE I -->
+        <div class="section">
+            <h2 class="section-title">Parte I: Concepto y Clasificación</h2>
+            
+            <div class="instruction">
+                <strong>1. Definición de enlace químico</strong><br>
+                Redacta con tus palabras qué es un enlace químico, explicando su función y por qué ocurre:
+            </div>
+            <textarea id="q1" placeholder="Escribe tu definición aquí..." data-ans="enlace"></textarea>
+
+            <div class="instruction" style="margin-top: 30px;">
+                <strong>2. Clasificación de compuestos por tipo de enlace</strong><br>
+                Arrastra cada compuesto a su clasificación correcta:
+            </div>
+
+            <div class="drag-container" id="bank">
+                <div class="draggable" draggable="true" data-val="ionico" id="d1">NaCl</div>
+                <div class="draggable" draggable="true" data-val="covalente-polar" id="d2">CO₂</div>
+                <div class="draggable" draggable="true" data-val="metalico" id="d3">Cu-Cu</div>
+                <div class="draggable" draggable="true" data-val="covalente-polar" id="d4">CH₄</div>
+                <div class="draggable" draggable="true" data-val="ionico" id="d5">CaF₂</div>
+                <div class="draggable" draggable="true" data-val="covalente-polar" id="d6">HCl</div>
+                <div class="draggable" draggable="true" data-val="metalico" id="d7">Fe-Fe</div>
+                <div class="draggable" draggable="true" data-val="covalente-nopolar" id="d8">O₂</div>
+                <div class="draggable" draggable="true" data-val="metalico" id="d9">Al-Al</div>
+                <div class="draggable" draggable="true" data-val="covalente-polar" id="d10">HF</div>
+                <div class="draggable" draggable="true" data-val="covalente-polar" id="d11">NH₃</div>
+                <div class="draggable" draggable="true" data-val="ionico" id="d12">MgO</div>
+                <div class="draggable" draggable="true" data-val="ionico" id="d13">KCl</div>
+                <div class="draggable" draggable="true" data-val="covalente-polar" id="d14">H₂O</div>
+                <div class="draggable" draggable="true" data-val="covalente-polar" id="d15">SO₂</div>
+                <div class="draggable" draggable="true" data-val="covalente-nopolar" id="d16">N₂</div>
+                <div class="draggable" draggable="true" data-val="covalente-nopolar" id="d17">Cl₂</div>
+                <div class="draggable" draggable="true" data-val="covalente-polar" id="d18">CO</div>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Iónico</th>
+                    <th>Covalente Polar</th>
+                    <th>Covalente No Polar</th>
+                    <th>Metálico</th>
+                </tr>
+                <tr>
+                    <td><div class="drop-zone" data-ans="ionico"></div></td>
+                    <td><div class="drop-zone" data-ans="covalente-polar"></div></td>
+                    <td><div class="drop-zone" data-ans="covalente-nopolar"></div></td>
+                    <td><div class="drop-zone" data-ans="metalico"></div></td>
+                </tr>
+                <tr>
+                    <td><div class="drop-zone" data-ans="ionico"></div></td>
+                    <td><div class="drop-zone" data-ans="covalente-polar"></div></td>
+                    <td><div class="drop-zone" data-ans="covalente-nopolar"></div></td>
+                    <td><div class="drop-zone" data-ans="metalico"></div></td>
+                </tr>
+                <tr>
+                    <td><div class="drop-zone" data-ans="ionico"></div></td>
+                    <td><div class="drop-zone" data-ans="covalente-polar"></div></td>
+                    <td><div class="drop-zone" data-ans="covalente-nopolar"></div></td>
+                    <td><div class="drop-zone" data-ans="metalico"></div></td>
+                </tr>
+                <tr>
+                    <td><div class="drop-zone" data-ans="ionico"></div></td>
+                    <td><div class="drop-zone" data-ans="covalente-polar"></div></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- PARTE II -->
+        <div class="section">
+            <h2 class="section-title">Parte II: Identificación</h2>
+            <div class="instruction">
+                <strong>Nota:</strong> En "Lista de Iones", escribe solo los símbolos separados por comas.
+            </div>
+
+            <!-- Teclado Químico para Parte II -->
+            <div id="symbol-bar">
+                <div style="width: 100%; text-align: center; font-weight: bold; color: var(--primary); margin-bottom: 5px;">Teclado Químico</div>
+                <button class="sym-btn" onclick="insertSymbol('⁺')">⁺</button>
+                <button class="sym-btn" onclick="insertSymbol('⁻')">⁻</button>
+                <button class="sym-btn" onclick="insertSymbol('²⁺')">²⁺</button>
+                <button class="sym-btn" onclick="insertSymbol('²⁻')">²⁻</button>
+                <button class="sym-btn" onclick="insertSymbol('³⁺')">³⁺</button>
+                <button class="sym-btn" onclick="insertSymbol('³⁻')">³⁻</button>
+                <button class="sym-btn" onclick="insertSymbol('₂')">₂</button>
+                <button class="sym-btn" onclick="insertSymbol('₃')">₃</button>
+                <button class="sym-btn" onclick="insertSymbol('₄')">₄</button>
+                <button class="sym-btn" onclick="insertSymbol('₅')">₅</button>
+                <button class="sym-btn" onclick="insertSymbol('₆')">₆</button>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Compuesto</th>
+                    <th>Nomenclatura</th>
+                    <th>Enlace</th>
+                    <th>Lista de Iones</th>
+                </tr>
+                <tr>
+                    <td class="compound">Na₂SO₄</td>
+                    <td><input type="text" data-ans="sulfato de sodio" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="ionico"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="na|so4" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">HNO₃</td>
+                    <td><input type="text" data-ans="acido nitrico" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="covalente"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="h|no3" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">CaCO₃</td>
+                    <td><input type="text" data-ans="carbonato de calcio" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="ionico"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="ca|co3" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">C₆H₆</td>
+                    <td><input type="text" data-ans="benceno" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="covalente"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="ninguno" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">AgNO₃</td>
+                    <td><input type="text" data-ans="nitrato de plata" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="ionico"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="ag|no3" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">CCl₄</td>
+                    <td><input type="text" data-ans="tetracloruro de carbono" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="covalente"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="ninguno" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">NH₄Cl</td>
+                    <td><input type="text" data-ans="cloruro de amonio" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="ionico"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="nh4|cl" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">KOH</td>
+                    <td><input type="text" data-ans="hidroxido de potasio" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="ionico"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="k|oh" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">Fe₂O₃</td>
+                    <td><input type="text" data-ans="oxido ferrico" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="ionico"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="fe|o" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">Na₃PO₄</td>
+                    <td><input type="text" data-ans="fosfato de sodio" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="ionico"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="na|po4" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">SiO₂</td>
+                    <td><input type="text" data-ans="dioxido de silicio" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="covalente"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="ninguno" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">H₂SO₄</td>
+                    <td><input type="text" data-ans="acido sulfurico" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="covalente"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="h|so4" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">PCl₅</td>
+                    <td><input type="text" data-ans="pentacloruro de fosforo" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="covalente"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="ninguno" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">H₃PO₄</td>
+                    <td><input type="text" data-ans="acido fosforico" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="covalente"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="h|po4" placeholder="Iones separados"></td>
+                </tr>
+                <tr>
+                    <td class="compound">CH₃OH</td>
+                    <td><input type="text" data-ans="metanol" placeholder="Escribe el nombre..."></td>
+                    <td><select data-ans="covalente"><option value="">---</option><option value="ionico">Iónico</option><option value="covalente">Covalente</option><option value="metalico">Metálico</option></select></td>
+                    <td><input type="text" data-ans="ninguno" placeholder="Iones separados"></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- PARTE III -->
+        <div class="section">
+            <h2 class="section-title">Parte III: Representaciones y Disociación</h2>
+            
+            <div class="example-box">
+                💡 <strong>Cómo calcular electrones de valencia totales:</strong><br>
+                <strong>Ejemplo con H₂O:</strong><br>
+                • H tiene 1 electrón de valencia (Grupo 1) → 2 átomos de H = 2 e⁻<br>
+                • O tiene 6 electrones de valencia (Grupo 16) → 1 átomo de O = 6 e⁻<br>
+                • <strong>Total: 2 + 6 = 8 electrones</strong><br><br>
+                Consulta la tabla periódica: el número del grupo indica los electrones de valencia.
+            </div>
+
+            <div class="instruction">
+                <strong>8. Diagramas de Lewis (e⁻ totales):</strong><br>
+                Calcula y escribe SOLO el número total de electrones de valencia para cada molécula:
+            </div>
+
+            <table style="margin-top: 15px;">
+                <tr>
+                    <th style="width: 25%;">Molécula</th>
+                    <th>Electrones Totales</th>
+                </tr>
+                <tr>
+                    <td class="compound">H₂O</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="8" style="width: 150px;"></td>
+                </tr>
+                <tr>
+                    <td class="compound">CH₄</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="8" style="width: 150px;"></td>
+                </tr>
+                <tr>
+                    <td class="compound">CO₂</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="16" style="width: 150px;"></td>
+                </tr>
+                <tr>
+                    <td class="compound">NH₃</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="8" style="width: 150px;"></td>
+                </tr>
+                <tr>
+                    <td class="compound">N₂</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="10" style="width: 150px;"></td>
+                </tr>
+                <tr>
+                    <td class="compound">HCN</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="10" style="width: 150px;"></td>
+                </tr>
+                <tr>
+                    <td class="compound">SO₃</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="24" style="width: 150px;"></td>
+                </tr>
+                <tr>
+                    <td class="compound">PBr₃</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="26" style="width: 150px;"></td>
+                </tr>
+                <tr>
+                    <td class="compound">O₂</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="12" style="width: 150px;"></td>
+                </tr>
+                <tr>
+                    <td class="compound">F₂</td>
+                    <td><input type="text" placeholder="Número total de e⁻" data-ans="14" style="width: 150px;"></td>
+                </tr>
+            </table>
+
+            <div class="instruction" style="margin-top: 40px;">
+                <strong>9. Modelos de enlaces iónicos y covalentes:</strong><br>
+                Describe visualmente la formación de enlaces en los siguientes compuestos:<br><br>
+                
+                <strong style="color: #dc2626;">3 Compuestos Iónicos:</strong> Explica cómo se transfieren electrones y se forman cationes y aniones<br>
+                <strong style="color: #2563eb;">3 Compuestos Covalentes:</strong> Explica cómo se comparten electrones entre átomos
+            </div>
+            
+            <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 6px; margin: 15px 0; font-size: 0.9rem;">
+                <strong>💡 Ejemplo de descripción:</strong><br>
+                • <strong>NaCl (iónico):</strong> El Na pierde 1 e⁻ y forma Na⁺, el Cl gana 1 e⁻ y forma Cl⁻. Atracción electrostática entre iones forma el enlace iónico.<br>
+                • <strong>H₂O (covalente):</strong> El O comparte 2 electrones con 2 átomos de H, formando 2 enlaces covalentes simples.
+            </div>
+
+            <textarea placeholder="Escribe aquí tus 6 descripciones (3 iónicos + 3 covalentes)..." style="min-height: 150px;" data-ans="modelos"></textarea>
+
+            <div class="example-box" style="margin-top: 40px;">
+                💡 <strong>Ayuda Disociación:</strong> Haz clic en el campo de texto y luego usa el teclado flotante para escribir los iones.
+            </div>
+
+            <!-- Teclado Químico para Parte III -->
+            <div id="symbol-bar-part3">
+                <div style="width: 100%; text-align: center; font-weight: bold; color: var(--primary); margin-bottom: 5px;">Teclado Químico</div>
+                <button class="sym-btn" onclick="insertSymbol('⁺')">⁺</button>
+                <button class="sym-btn" onclick="insertSymbol('⁻')">⁻</button>
+                <button class="sym-btn" onclick="insertSymbol('²⁺')">²⁺</button>
+                <button class="sym-btn" onclick="insertSymbol('²⁻')">²⁻</button>
+                <button class="sym-btn" onclick="insertSymbol('³⁺')">³⁺</button>
+                <button class="sym-btn" onclick="insertSymbol('³⁻')">³⁻</button>
+                <button class="sym-btn" onclick="insertSymbol('₂')">₂</button>
+                <button class="sym-btn" onclick="insertSymbol('₃')">₃</button>
+                <button class="sym-btn" onclick="insertSymbol('₄')">₄</button>
+                <button class="sym-btn" onclick="insertSymbol('→')">→</button>
+            </div>
+
+            <div class="instruction">
+                <strong>10. Ecuaciones de disociación en agua:</strong>
+            </div>
+
+            <label class="lewis-label">NaCl →</label>
+            <input type="text" class="lewis-input" placeholder="Escribe los iones formados" data-ans="na|cl">
+
+            <label class="lewis-label">H₂SO₄ →</label>
+            <input type="text" class="lewis-input" placeholder="Escribe los iones formados" data-ans="h|so4">
+
+            <label class="lewis-label">NH₄OH →</label>
+            <input type="text" class="lewis-input" placeholder="Escribe los iones formados" data-ans="nh4|oh">
+
+            <label class="lewis-label">Ca(OH)₂ →</label>
+            <input type="text" class="lewis-input" placeholder="Escribe los iones formados" data-ans="ca|oh">
+
+            <div class="instruction" style="margin-top: 40px;">
+                <strong>11. Informe Final</strong><br>
+                Redacta un informe breve respondiendo:
+                <ul style="margin: 15px 0 10px 25px; line-height: 1.8;">
+                    <li>¿Por qué es importante entender los enlaces químicos?</li>
+                    <li>5 ejemplos en la industria donde los enlaces son clave</li>
+                    <li>Ejemplo cotidiano explicado con enlaces o iones</li>
+                </ul>
+            </div>
+            <textarea placeholder="Escribe tu informe aquí..." style="min-height: 200px;" data-ans="informe"></textarea>
+        </div>
+
+        <button class="btn-submit" onclick="evaluateQuiz()">✅ EVALUAR RESPUESTAS</button>
+    </div>
+
+    <div id="results-panel">
+        <h2>📊 RESULTADOS DE LA EVALUACIÓN</h2>
+        <div class="grade-display"><span id="grade">0</span>%</div>
+        <p style="font-size: 1.2rem; margin: 10px 0;">
+            <span id="correct">0</span> / <span id="total">0</span> respuestas correctas
+        </p>
+        <div style="margin: 30px 0;">
+            <strong style="font-size: 1.3rem;">🔒 Código de Verificación:</strong><br>
+            <div class="v-code" id="verifyCode">000-00000-0</div>
+            <p style="opacity: 0.8;">📸 Toma captura de pantalla de este código</p>
+        </div>
+        <button class="download-btn" onclick="downloadReport()">📥 DESCARGAR COMPROBANTE</button>
+    </div>
+
+    <div class="autosave" id="autosave">💾 Guardado</div>
+
+    <script>
+        const STORAGE_KEY = 'tema3_enlaces_completo';
+        let stats = {
+            pastes: 0, tabs: 0, rapid: 0, keys: 0, backspaces: 0,
+            attempts: 0, lastIn: Date.now(), start: Date.now(),
+            answerTimes: [], fillOrder: []
+        };
+
+        let lastFocusedInput = null;
+
+        // Tracking
+        document.addEventListener('paste', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                stats.pastes++;
+                autoSave();
+            }
+        });
+
+        window.addEventListener('blur', function() {
+            stats.tabs++;
+            autoSave();
+        });
+
+        document.addEventListener('input', function() {
+            if (Date.now() - stats.lastIn < 200) stats.rapid++;
+            stats.lastIn = Date.now();
+            autoSave();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                stats.keys++;
+                if (e.key === 'Backspace' || e.key === 'Delete') stats.backspaces++;
+            }
+        });
+
+        document.addEventListener('focusin', function(e) {
+            if (e.target.tagName === 'INPUT' && e.target.type === 'text') {
+                lastFocusedInput = e.target;
+            }
+        });
+
+        setTimeout(function() {
+            document.querySelectorAll('input[type="text"], textarea, select').forEach(function(inp, idx) {
+                let startTime = null;
+                inp.addEventListener('focus', function() {
+                    startTime = Date.now();
+                });
+                inp.addEventListener('blur', function() {
+                    if (startTime && inp.value.trim() !== '') {
+                        const elapsed = Date.now() - startTime;
+                        stats.answerTimes.push(elapsed);
+                        stats.fillOrder.push(idx);
+                    }
+                });
+            });
+        }, 100);
+
+        // Drag and Drop
+        let draggedElement = null;
+
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.classList.contains('draggable')) {
+                draggedElement = e.target;
+                e.target.style.opacity = '0.5';
+            }
+        });
+
+        document.addEventListener('dragend', function(e) {
+            if (e.target.classList.contains('draggable')) {
+                e.target.style.opacity = '1';
+            }
+        });
+
+        document.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            if (e.target.classList.contains('drop-zone') || e.target.classList.contains('drag-container')) {
+                e.target.classList.add('drag-over');
+            }
+        });
+
+        document.addEventListener('dragleave', function(e) {
+            if (e.target.classList.contains('drop-zone') || e.target.classList.contains('drag-container')) {
+                e.target.classList.remove('drag-over');
+            }
+        });
+
+        document.addEventListener('drop', function(e) {
+            e.preventDefault();
+            const target = e.target;
+            
+            if (target.classList.contains('drop-zone') && draggedElement) {
+                target.classList.remove('drag-over');
+                if (target.children.length === 0) {
+                    target.appendChild(draggedElement);
+                    autoSave();
+                }
+            } else if (target.classList.contains('drag-container') && draggedElement) {
+                target.classList.remove('drag-over');
+                target.appendChild(draggedElement);
+                autoSave();
+            }
+        });
+
+        // Teclado químico
+        function insertSymbol(sym) {
+            if (!lastFocusedInput) {
+                alert('Haz clic primero en un campo de texto');
+                return;
+            }
+            const start = lastFocusedInput.selectionStart;
+            const end = lastFocusedInput.selectionEnd;
+            const text = lastFocusedInput.value;
+            lastFocusedInput.value = text.substring(0, start) + sym + text.substring(end);
+            lastFocusedInput.selectionStart = lastFocusedInput.selectionEnd = start + sym.length;
+            lastFocusedInput.focus();
+            autoSave();
+        }
+
+        // Integridad
+        function calculateIntegrity() {
+            let score = 100, flags = [];
+
+            if (stats.pastes > 5) { score -= 25; flags.push('excessive_paste'); }
+            if (stats.tabs > 10) { score -= 15; flags.push('frequent_tab_switching'); }
+            const rapidFills = stats.answerTimes.filter(function(t) { return t < 500; }).length;
+            if (rapidFills > 8) { score -= 30; flags.push('rapid_fill_pattern'); }
+            if (stats.answerTimes.length > 10) {
+                const avg = stats.answerTimes.reduce(function(a, b) { return a + b; }, 0) / stats.answerTimes.length;
+                if (avg < 2000) { score -= 25; flags.push('unrealistic_speed'); }
+            }
+            if (stats.keys > 0) {
+                const backspaceRatio = stats.backspaces / stats.keys;
+                if (backspaceRatio < 0.02) { score -= 20; flags.push('no_corrections'); }
+            }
+            if (stats.fillOrder.length > 15) {
+                let isSequential = true;
+                for (let i = 1; i < stats.fillOrder.length; i++) {
+                    if (stats.fillOrder[i] !== stats.fillOrder[i - 1] + 1) {
+                        isSequential = false;
+                        break;
+                    }
+                }
+                if (isSequential) { score -= 15; flags.push('perfect_sequence'); }
+            }
+
+            score = Math.max(0, Math.min(100, score));
+            const riskLevel = score >= 70 ? 'low' : (score >= 40 ? 'medium' : 'high');
+            const riskCode = score >= 70 ? 0 : (score >= 40 ? 1 : 2);
+
+            return { score: score, level: riskLevel, riskCode: riskCode, flags: flags };
+        }
+
+        // Evaluación
+        function evaluateQuiz() {
+            stats.attempts++;
+            let correct = 0, total = 0;
+
+            function normalize(text) {
+                return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '').replace(/[.,;:?!()]/g, '');
+            }
+
+            document.querySelectorAll('input[data-ans], select[data-ans], textarea[data-ans]').forEach(function(el) {
+                total++;
+                const userVal = normalize(el.value);
+                const answers = el.getAttribute('data-ans').split('|');
+                
+                let isCorrect = false;
+                
+                // Para respuestas numéricas (electrones totales)
+                if (answers.length === 1 && /^\d+$/.test(answers[0])) {
+                    isCorrect = el.value.trim() === answers[0];
+                }
+                // Para respuestas con múltiples partes (iones)
+                else if (answers.length > 1) {
+                    isCorrect = answers.every(function(ans) {
+                        return userVal.includes(normalize(ans));
+                    });
+                }
+                // Para respuestas de texto normales
+                else {
+                    isCorrect = userVal.includes(normalize(answers[0]));
+                }
+
+                if (el.value.trim() === '') isCorrect = false;
+
+                if (isCorrect) {
+                    correct++;
+                    el.classList.add('correct-input');
+                    el.classList.remove('incorrect-input');
+                } else if (el.value.trim() !== '') {
+                    el.classList.add('incorrect-input');
+                    el.classList.remove('correct-input');
+                }
+            });
+
+            document.querySelectorAll('.drop-zone[data-ans]').forEach(function(zone) {
+                total++;
+                const child = zone.firstElementChild;
+                if (child && child.getAttribute('data-val') === zone.getAttribute('data-ans')) {
+                    correct++;
+                    child.style.background = '#dcfce7';
+                    child.style.borderColor = '#22c55e';
+                } else if (child) {
+                    child.style.background = '#fee2e2';
+                    child.style.borderColor = '#ef4444';
+                }
+            });
+
+            const grade = Math.round((correct / total) * 100);
+            const integrity = calculateIntegrity();
+            const code = integrity.score.toString().padStart(3, '0') + '-' + integrity.riskCode + Date.now().toString().slice(-4) + '-' + stats.attempts;
+
+            document.getElementById('grade').textContent = grade;
+            document.getElementById('correct').textContent = correct;
+            document.getElementById('total').textContent = total;
+            document.getElementById('verifyCode').textContent = code;
+            document.getElementById('results-panel').style.display = 'block';
+            document.querySelector('.btn-submit').style.display = 'none';
+
+            document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+            autoSave();
+        }
+
+        // Descargar reporte
+        function downloadReport() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('es-MX');
+            const timeStr = now.toLocaleTimeString('es-MX');
+            const grade = document.getElementById('grade').textContent;
+            const verifyCode = document.getElementById('verifyCode').textContent;
+            const totalTime = Date.now() - stats.start;
+            const avgTime = stats.answerTimes.length > 0 ? (stats.answerTimes.reduce(function(a, b) { return a + b; }, 0) / stats.answerTimes.length) : 0;
+            const integrity = calculateIntegrity();
+            const rapidCount = stats.answerTimes.filter(function(t) { return t < 500; }).length;
+            const flagsText = integrity.flags.length > 0 ? integrity.flags.join(', ') : 'ninguno';
+
+            let riskText = '';
+            if (integrity.score >= 70) riskText = 'RIESGO BAJO - Comportamiento normal';
+            else if (integrity.score >= 40) riskText = 'RIESGO MEDIO - Revisión recomendada';
+            else riskText = 'RIESGO ALTO - Requiere verificación';
+
+            const lines = [
+                '================================================================',
+                '     COMPROBANTE - TEMA 3: ENLACES QUÍMICOS                    ',
+                '================================================================',
+                '', 'Fecha: ' + dateStr, 'Hora: ' + timeStr, '',
+                '----------------------------------------------------------------',
+                '                    RESULTADOS ACADÉMICOS                       ',
+                '----------------------------------------------------------------',
+                '', 'Calificación:                 ' + grade + '%',
+                'Número de Intentos:           ' + stats.attempts,
+                'Tiempo Total:                 ' + Math.round(totalTime / 1000) + ' segundos', '',
+                '================================================================',
+                '           CÓDIGO DE VERIFICACIÓN (VISIBLE)                     ',
+                '================================================================',
+                '', '    ' + verifyCode, '',
+                'FORMATO: [PUNTUACIÓN]-[RIESGO+TIMESTAMP]-[INTENTOS]',
+                '  • Primeros 3 dígitos: Puntuación de integridad (000-100)',
+                '  • Cuarto dígito: Nivel de riesgo (0=bajo, 1=medio, 2=alto)',
+                '  • Siguientes 4 dígitos: Timestamp de verificación',
+                '  • Último dígito: Número de intentos', '',
+                '----------------------------------------------------------------',
+                '           DATOS DE INTEGRIDAD (USO DOCENTE)                    ',
+                '----------------------------------------------------------------',
+                '', 'Puntuación de Integridad:     ' + integrity.score + '/100',
+                'Nivel de Riesgo:              ' + integrity.level,
+                'Tiempo Total:                 ' + Math.round(totalTime / 1000) + ' segundos',
+                'Tiempo Promedio/Pregunta:     ' + Math.round(avgTime) + ' ms',
+                'Eventos de Pegar:             ' + stats.pastes,
+                'Cambios de Ventana:           ' + stats.tabs,
+                'Teclas Backspace:             ' + stats.backspaces + ' / ' + stats.keys + ' total',
+                'Respuestas Rápidas (<500ms):  ' + rapidCount, '',
+                'Indicadores detectados:       ' + flagsText, '',
+                '================================================================',
+                '                 INTERPRETACIÓN DEL CÓDIGO                      ',
+                '================================================================',
+                '', 'Decodificación: ' + verifyCode, '',
+                '  • Puntuación: ' + integrity.score + '/100 puntos',
+                '  • Nivel: ' + integrity.level.toUpperCase(),
+                '  • Evaluación: ' + riskText,
+                '  • Número de intentos: ' + stats.attempts, '',
+                '----------------------------------------------------------------',
+                '              INSTRUCCIONES PARA EL ESTUDIANTE                  ',
+                '----------------------------------------------------------------',
+                '', '1. Toma CAPTURA DE PANTALLA del panel de resultados',
+                '2. Descarga este archivo .txt',
+                '3. Entrega AMBOS archivos a tu profesor', '',
+                '================================================================',
+                '        Preparatoria TecMilenio - Curso de Química              ',
+                '                        2026                                     ',
+                '================================================================'
+            ];
+
+            const txt = lines.join('\n');
+            const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Tema3_Enlaces_Comprobante_' + Date.now() + '.txt';
+            link.click();
+        }
+
+        // Guardar automático
+        function autoSave() {
+            const data = {
+                inputs: Array.from(document.querySelectorAll('input, select, textarea')).map(function(e) { return e.value; }),
+                dnd: [],
+                stats: stats
+            };
+
+            document.querySelectorAll('.drop-zone').forEach(function(zone, i) {
+                if (zone.children.length > 0) {
+                    data.dnd.push({ z: i, id: zone.children[0].id });
+                }
+            });
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            
+            const indicator = document.getElementById('autosave');
+            indicator.style.display = 'block';
+            setTimeout(function() {
+                indicator.style.display = 'none';
+            }, 1000);
+        }
+
+        // Cargar guardado
+        window.addEventListener('load', function() {
+            const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            if (saved) {
+                const inputs = document.querySelectorAll('input, select, textarea');
+                saved.inputs.forEach(function(val, i) {
+                    if (inputs[i]) inputs[i].value = val;
+                });
+
+                if (saved.stats) {
+                    stats = saved.stats;
+                    if (!stats.answerTimes) stats.answerTimes = [];
+                    if (!stats.fillOrder) stats.fillOrder = [];
+                }
+
+                if (saved.dnd) {
+                    const zones = document.querySelectorAll('.drop-zone');
+                    saved.dnd.forEach(function(item) {
+                        const el = document.getElementById(item.id);
+                        if (el && zones[item.z]) {
+                            zones[item.z].appendChild(el);
+                        }
+                    });
+                }
+            }
+        });
+
+        // Reiniciar
+        function resetAll() {
+            if (confirm('¿Estás seguro de que quieres reiniciar toda la actividad?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
