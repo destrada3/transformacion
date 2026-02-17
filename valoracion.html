@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Valoración de Avances - Preparatoria TecMilenio</title>
+    <style>
+        :root {
+            --primary: #004a99;
+            --secondary: #0072ce;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            /* Deshabilitar selección de texto */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Permitir selección solo en campos de texto */
+        input, textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 { margin: 0; font-size: 1.8rem; }
+        .header p { margin: 10px 0 0; opacity: 0.9; }
+
+        .student-info {
+            padding: 20px;
+            background: #f1f5f9;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .student-info label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .student-info input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .section { padding: 35px; border-bottom: 2px solid #e2e8f0; }
+        .section-title {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            border-left: 6px solid var(--accent);
+            padding-left: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .instruction {
+            background: #eff6ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #1e40af;
+            border: 1px solid #dbeafe;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.85rem; }
+        th, td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; vertical-align: middle; }
+        th { background: #f8fafc; color: var(--primary); font-weight: bold; text-align: center; }
+
+        select, input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        /* Drag & Drop */
+        .drag-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            min-height: 60px;
+            border: 2px dashed #cbd5e1;
+            justify-content: center;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .draggable-item {
+            background: white;
+            padding: 10px 18px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            cursor: grab;
+            font-size: 0.85rem;
+            user-select: none;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            color: var(--primary);
+        }
+
+        .draggable-item:active { cursor: grabbing; transform: scale(0.95); }
+        .draggable-item:hover { border-color: var(--secondary); background: #f0f9ff; box-shadow: 0 4px 12px rgba(0, 114, 206, 0.2); }
+
+        .drop-zone {
+            display: inline-block;
+            min-width: 160px;
+            height: 38px;
+            border-bottom: 2px solid var(--secondary);
+            margin: 0 5px;
+            vertical-align: middle;
+            background: #f1f5f9;
+            position: relative;
+            transition: 0.3s;
+            text-align: center;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .drop-zone.drag-over { background: #dbeafe; border-bottom-color: var(--accent); }
+
+        .correct-input, .correct-drop { background-color: #dcfce7 !important; border-color: #22c55e !important; }
+        .incorrect-input, .incorrect-drop { background-color: #fee2e2 !important; border-color: #ef4444 !important; }
+
+        .radio-cell { text-align: center; width: 60px; }
+        input[type="radio"] { transform: scale(1.3); cursor: pointer; }
+
+        .btn-submit {
+            display: block; width: 90%; max-width: 500px; margin: 50px auto; padding: 25px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white; border: none; border-radius: 12px; font-size: 1.4rem;
+            font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 74, 153, 0.4);
+            transition: all 0.3s;
+        }
+
+        #name-error {
+            display: none;
+            background: var(--danger);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #results-panel {
+            display: none; padding: 60px 20px; background: #0f172a; color: white; text-align: center;
+        }
+
+        .grade-display { font-size: 6rem; font-weight: bold; color: var(--accent); margin: 25px 0; }
+        .v-code-container {
+            background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 15px;
+            border: 2px dashed var(--accent); display: inline-block; margin: 30px 0;
+        }
+        .v-code { font-family: 'Courier New', monospace; font-size: 2.5rem; letter-spacing: 5px; color: var(--accent); }
+
+        .keyboard {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #1e293b; padding: 15px 30px; border-radius: 60px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); display: flex; gap: 15px; z-index: 9999;
+            border: 1px solid #334155;
+        }
+
+        .key-btn { width: 45px; height: 45px; border-radius: 50%; border: none; background: #334155; color: white; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
+
+        /* Matching list styles */
+        .matching-list { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .matching-card { display: flex; align-items: center; background: #ffffff; border: 1px solid var(--border); padding: 15px; border-radius: 10px; transition: all 0.2s ease; gap: 15px; }
+        .matching-card:hover { border-color: var(--secondary); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); transform: translateX(5px); }
+        .matching-number { font-weight: bold; color: var(--primary); min-width: 25px; }
+        .matching-drop-container { display: flex; align-items: center; justify-content: center; min-width: 140px; }
+        .matching-text { flex-grow: 1; font-size: 0.95rem; color: #334155; }
+
+        .sn-analysis-card { border: 2px solid var(--primary); border-radius: 15px; padding: 30px; background: #ffffff; margin: 25px 0; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); }
+        .sn-header-box { background: var(--primary); color: white; padding: 12px 25px; border-radius: 10px; display: inline-block; font-family: 'Courier New', monospace; font-weight: bold; font-size: 1.2rem; margin-bottom: 25px; }
+
+        @media (max-width: 600px) {
+            .student-info { grid-template-columns: 1fr; }
+            .keyboard { width: 95%; flex-wrap: wrap; justify-content: center; }
+            .matching-card { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+
+<body oncopy="return false" oncut="return false" onpaste="handlePasteAttempt(event)" oncontextmenu="return false">
+
+    <div class="container">
+        <div class="header">
+            <h1>Valoración de Avances - Módulo 1</h1>
+            <p>Preparatoria TecMilenio | Transformación de la Materia</p>
+        </div>
+
+        <div class="student-info">
+            <div>
+                <label>Nombre del Estudiante:</label>
+                <input type="text" id="studentName" placeholder="Escribe tu nombre completo...">
+            </div>
+            <div>
+                <label>Grupo:</label>
+                <input type="text" id="studentGroup" placeholder="Ej. 101">
+            </div>
+        </div>
+
+        <div id="name-error">⚠️ Por favor, ingresa tu nombre completo antes de evaluar.</div>
+
+        <!-- I. MÉTODO CIENTÍFICO -->
+        <div class="section">
+            <div class="section-title">I. Pasos del Método Científico</div>
+            <div class="instruction">Identifica el paso correspondiente (observación, planteamiento del problema, conclusiones, hipótesis, experimentación).</div>
+            <table>
+                <tr><th>Enunciado</th><th style="width: 250px;">Paso correspondiente</th></tr>
+                <tr><td>a. La luz visible está compuesta por la serie espectral de colores correspondientes a la región visible...</td><td><select data-ans="conclusiones"><option value="">Selecciona...</option><option value="observacion">Observación</option><option value="planteamiento">Planteamiento del problema</option><option value="hipotesis">Hipótesis</option><option value="experimentacion">Experimentación</option><option value="conclusiones">Conclusiones</option></select></td></tr>
+                <tr><td>b. El arcoiris aparece después de la lluvia.</td><td><select data-ans="observacion"><option value="">Selecciona...</option><option value="observacion">Observación</option><option value="conclusiones">Conclusiones</option></select></td></tr>
+                <tr><td>c. El arcoíris es la descomposición de la luz blanca por las gotas de lluvia.</td><td><select data-ans="hipotesis"><option value="">Selecciona...</option><option value="observacion">Observación</option><option value="hipotesis">Hipótesis</option><option value="experimentacion">Experimentación</option></select></td></tr>
+                <tr><td>d. ¿A qué se debe la aparición del arcoíris?</td><td><select data-ans="planteamiento"><option value="">Selecciona...</option><option value="planteamiento">Planteamiento del problema</option></select></td></tr>
+                <tr><td>e. Se simula la luz solar con un foco de luz blanca y un prisma para reproducir el fenómeno.</td><td><select data-ans="experimentacion"><option value="">Selecciona...</option><option value="experimentacion">Experimentación</option></select></td></tr>
+            </table>
+        </div>
+
+        <!-- II. SOLUCIÓN DE PROBLEMAS (DRAG & DROP) -->
+        <div class="section">
+            <div class="section-title">II. Solución de problemas en la vida diaria</div>
+            <div class="instruction">Arrastra la opción correcta del recuadro para completar cada enunciado.</div>
+            <div class="drag-bank" id="bank-ii">
+                <div class="draggable-item" draggable="true" id="ii-1">recopila y escribe los datos</div>
+                <div class="draggable-item" draggable="true" id="ii-2">identifica el problema</div>
+                <div class="draggable-item" draggable="true" id="ii-3">analiza los datos</div>
+                <div class="draggable-item" draggable="true" id="ii-4">evalúa la respuesta</div>
+                <div class="draggable-item" draggable="true" id="ii-5">pon en práctica el plan propuesto</div>
+            </div>
+            <ol>
+                <li style="margin-bottom: 20px;"><div class="drop-zone" data-ans="ii-1"></div> para obtener una solución tentativa.</li>
+                <li style="margin-bottom: 20px;"><div class="drop-zone" data-ans="ii-2"></div> y enuncia con precisión lo que se busca.</li>
+                <li style="margin-bottom: 20px;"><div class="drop-zone" data-ans="ii-3"></div> y hechos conocidos relacionados con el problema.</li>
+                <li style="margin-bottom: 20px;"><div class="drop-zone" data-ans="ii-4"></div> para comprobar que es una solución razonable...</li>
+                <li style="margin-bottom: 20px;"><div class="drop-zone" data-ans="ii-5"></div> identifica el tipo de problema por resolver y formula el problema...</li>
+            </ol>
+        </div>
+
+        <!-- III. INTENSIVAS Y EXTENSIVAS -->
+        <div class="section">
+            <div class="section-title">III. Propiedades Intensivas (I) o Extensivas (E)</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <table>
+                    <tr><th>Propiedad</th><th>I/E</th></tr>
+                    <tr><td>Densidad</td><td><input type="text" data-ans="I" maxlength="1" style="text-align:center"></td></tr>
+                    <tr><td>Volumen</td><td><input type="text" data-ans="E" maxlength="1" style="text-align:center"></td></tr>
+                    <tr><td>Viscosidad</td><td><input type="text" data-ans="I" maxlength="1" style="text-align:center"></td></tr>
+                    <tr><td>Conductividad térmica</td><td><input type="text" data-ans="I" maxlength="1" style="text-align:center"></td></tr>
+                    <tr><td>Brillo</td><td><input type="text" data-ans="I" maxlength="1" style="text-align:center"></td></tr>
+                </table>
+                <table>
+                    <tr><th>Propiedad</th><th>I/E</th></tr>
+                    <tr><td>Masa</td><td><input type="text" data-ans="E" maxlength="1" style="text-align:center"></td></tr>
+                    <tr><td>Calor específico</td><td><input type="text" data-ans="I" maxlength="1" style="text-align:center"></td></tr>
+                    <tr><td>Punto de fusión</td><td><input type="text" data-ans="I" maxlength="1" style="text-align:center"></td></tr>
+                    <tr><td>Peso</td><td><input type="text" data-ans="E" maxlength="1" style="text-align:center"></td></tr>
+                    <tr><td>Longitud</td><td><input type="text" data-ans="E" maxlength="1" style="text-align:center"></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- IV. RELACIÓN CON OTRAS CIENCIAS -->
+        <div class="section">
+            <div class="section-title">IV. Relación de la Química con otras Ciencias</div>
+            <div class="instruction">Identifica la ciencia correspondiente a cada descripción.</div>
+            <table>
+                <tr><th>Descripción</th><th>Ciencia</th></tr>
+                <tr><td>a. Estudia materia, energía y cambios físicos naturales.</td><td><select data-ans="fisica"><option value="">---</option><option value="fisica">Física</option><option value="bioquimica">Bioquímica</option><option value="matematicas">Matemáticas</option></select></td></tr>
+                <tr><td>b. Unión de ciertas áreas de la química y la biología.</td><td><select data-ans="bioquimica"><option value="">---</option><option value="bioquimica">Bioquímica</option><option value="historia">Historia</option></select></td></tr>
+                <tr><td>c. Necesidad de representación numérica de los fenómenos.</td><td><select data-ans="matematicas"><option value="">---</option><option value="matematicas">Matemáticas</option><option value="economia">Economía</option></select></td></tr>
+                <tr><td>d. Acontecimientos y fechas sobre descubrimientos importantes.</td><td><select data-ans="historia"><option value="">---</option><option value="historia">Historia</option><option value="agricultura">Agricultura</option></select></td></tr>
+                <tr><td>e. Empleo de fertilizantes para obtener cosechas de calidad.</td><td><select data-ans="agricultura"><option value="">---</option><option value="agricultura">Agricultura</option><option value="bioquimica">Bioquímica</option></select></td></tr>
+                <tr><td>f. Métodos para producir sustancias a precios competitivos.</td><td><select data-ans="economia"><option value="">---</option><option value="economia">Economía</option><option value="fisica">Física</option></select></td></tr>
+            </table>
+        </div>
+
+        <!-- V. PROPIEDADES Y CAMBIOS -->
+        <div class="section">
+            <div class="section-title">V. Propiedades y Cambios de la Materia</div>
+            <div class="instruction">PF: Propiedad Física, PQ: Química, CF: Cambio Físico, CQ: Químico.</div>
+            <table>
+                <tr><th>Enunciado</th><th class="radio-cell">PF</th><th class="radio-cell">PQ</th><th class="radio-cell">CF</th><th class="radio-cell">CQ</th></tr>
+                <tr class="row-v" data-correct="cq"><td>1. La efervescencia de una tableta en agua</td><td><input type="radio" name="v1" value="pf"></td><td><input type="radio" name="v1" value="pq"></td><td><input type="radio" name="v1" value="cf"></td><td><input type="radio" name="v1" value="cq"></td></tr>
+                <tr class="row-v" data-correct="cq"><td>2. Encender un cerillo</td><td><input type="radio" name="v2" value="pf"></td><td><input type="radio" name="v2" value="pq"></td><td><input type="radio" name="v2" value="cf"></td><td><input type="radio" name="v2" value="cq"></td></tr>
+                <tr class="row-v" data-correct="pf"><td>3. El azufre es un polvo amarillo brillante</td><td><input type="radio" name="v3" value="pf"></td><td><input type="radio" name="v3" value="pq"></td><td><input type="radio" name="v3" value="cf"></td><td><input type="radio" name="v3" value="cq"></td></tr>
+                <tr class="row-v" data-correct="cf"><td>4. La sal se solubilizó completamente en agua</td><td><input type="radio" name="v4" value="pf"></td><td><input type="radio" name="v4" value="pq"></td><td><input type="radio" name="v4" value="cf"></td><td><input type="radio" name="v4" value="cq"></td></tr>
+                <tr class="row-v" data-correct="pq"><td>5. El pH de una sustancia</td><td><input type="radio" name="v5" value="pf"></td><td><input type="radio" name="v5" value="pq"></td><td><input type="radio" name="v5" value="cf"></td><td><input type="radio" name="v5" value="cq"></td></tr>
+                <tr class="row-v" data-correct="cq"><td>6. La fotosíntesis</td><td><input type="radio" name="v6" value="pf"></td><td><input type="radio" name="v6" value="pq"></td><td><input type="radio" name="v6" value="cf"></td><td><input type="radio" name="v6" value="cq"></td></tr>
+                <tr class="row-v" data-correct="cf"><td>7. Aplastar una lata</td><td><input type="radio" name="v7" value="pf"></td><td><input type="radio" name="v7" value="pq"></td><td><input type="radio" name="v7" value="cf"></td><td><input type="radio" name="v7" value="cq"></td></tr>
+                <tr class="row-v" data-correct="pf"><td>8. El agua tiene punto de ebullición de 100°C</td><td><input type="radio" name="v8" value="pf"></td><td><input type="radio" name="v8" value="pq"></td><td><input type="radio" name="v8" value="cf"></td><td><input type="radio" name="v8" value="cq"></td></tr>
+                <tr class="row-v" data-correct="cf"><td>9. Derretir mantequilla</td><td><input type="radio" name="v9" value="pf"></td><td><input type="radio" name="v9" value="pq"></td><td><input type="radio" name="v9" value="cf"></td><td><input type="radio" name="v9" value="cq"></td></tr>
+                <tr class="row-v" data-correct="pq"><td>10. La toxicidad de una sustancia</td><td><input type="radio" name="v10" value="pf"></td><td><input type="radio" name="v10" value="pq"></td><td><input type="radio" name="v10" value="cf"></td><td><input type="radio" name="v10" value="cq"></td></tr>
+            </table>
+        </div>
+
+        <!-- VI. CAMBIOS DE FASE -->
+        <div class="section">
+            <div class="section-title">VI. Cambios de Fase y Estados de Agregación</div>
+            <div class="instruction">Completa cada uno de los enunciados usando los cambios de fase o estados de agregación de la materia.</div>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <p>1. Si dejamos una barra de chocolate sobre el asiento del automóvil, en un día muy caluroso, podremos observar el cambio de fase de <input type="text" data-ans="fusion" style="width:140px"> sin lugar a duda.</p>
+                <p>2. Al verter cera líquida y caliente dentro de un molde y esperar unos minutos para que se enfríe se lleva a cabo el cambio de fase de <input type="text" data-ans="solidificacion" style="width:160px">.</p>
+                <p>3. Es posible percibir el aroma de una persona, gracias a que sus humores (sudor, perfume, etc.) sufren una <input type="text" data-ans="evaporacion|vaporizacion" style="width:150px">, gracias al calor corporal, llevando las sustancias del estado líquido al <input type="text" data-ans="gas|gaseoso" style="width:100px">.</p>
+                <p>4. Es posible observar el cambio de estado de <input type="text" data-ans="condensacion" style="width:140px"> en las paredes frías de la regadera, después de darnos un baño caliente y reconfortante. Esto se debe a que el agua en estado <input type="text" data-ans="gaseoso|gas" style="width:110px"> pasa al estado <input type="text" data-ans="liquido" style="width:100px">.</p>
+                <p>5. En una mañana fría la capa de hielo que cubre la superficie de nuestros automóviles se debe a que el agua presente en la atmósfera cambia su estado de agregación de <input type="text" data-ans="gas|gaseoso" style="width:110px"> a <input type="text" data-ans="solido" style="width:100px">; se efectúa una <input type="text" data-ans="sublimacion inversa|deposicion" style="width:220px">.</p>
+            </div>
+        </div>
+
+        <!-- VII. CLASE DE MATERIA -->
+        <div class="section">
+            <div class="section-title">VII. Clase de Materia (Elemento, Compuesto o Mezcla)</div>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 10px;">( <select data-ans="elemento" style="width:120px"><option value="">---</option><option value="elemento">Elemento</option><option value="compuesto">Compuesto</option><option value="mezcla">Mezcla</option></select> ) Las herrerías de aluminio son muy resistentes.</li>
+                <li style="margin-bottom: 10px;">( <select data-ans="elemento" style="width:120px"><option value="">---</option><option value="elemento">Elemento</option><option value="compuesto">Compuesto</option><option value="mezcla">Mezcla</option></select> ) Las partículas de oxígeno (O₂) que respiramos.</li>
+                <li style="margin-bottom: 10px;">( <select data-ans="mezcla" style="width:120px"><option value="">---</option><option value="elemento">Elemento</option><option value="compuesto">Compuesto</option><option value="mezcla">Mezcla</option></select> ) El acero que se utiliza en la construcción de edificios.</li>
+                <li style="margin-bottom: 10px;">( <select data-ans="mezcla" style="width:120px"><option value="">---</option><option value="elemento">Elemento</option><option value="compuesto">Compuesto</option><option value="mezcla">Mezcla</option></select> ) La miel que le pones a tus hot cakes.</li>
+                <li style="margin-bottom: 10px;">( <select data-ans="mezcla" style="width:120px"><option value="">---</option><option value="elemento">Elemento</option><option value="compuesto">Compuesto</option><option value="mezcla">Mezcla</option></select> ) El aire que nos rodea (compuesto por N₂, H₂, CO₂).</li>
+            </ul>
+        </div>
+
+        <!-- VIII. CARACTERÍSTICAS ESTADOS -->
+        <div class="section">
+            <div class="section-title">VIII. Características de los Estados de Agregación</div>
+            <ol>
+                <li style="margin-bottom: 10px;">No fluyen y no se pueden comprimir: <input type="text" data-ans="solidos" style="width:120px"></li>
+                <li style="margin-bottom: 10px;">No tienen forma definida, adoptan la forma del recipiente: <input type="text" data-ans="liquidos" style="width:120px"></li>
+                <li style="margin-bottom: 10px;">Se comprimen y ocupan todo el espacio del recipiente: <input type="text" data-ans="gases" style="width:120px"></li>
+                <li style="margin-bottom: 10px;">Predominan fuerzas de repulsión entre las moléculas: <input type="text" data-ans="gases" style="width:120px"></li>
+                <li style="margin-bottom: 10px;">La Energía cinética es igual a la energía potencial: <input type="text" data-ans="liquidos" style="width:120px"></li>
+            </ol>
+        </div>
+
+        <!-- IX. ESTRUCTURA ATÓMICA (DRAG & DROP) -->
+        <div class="section">
+            <div class="section-title">IX. Estructura Atómica</div>
+            <div class="instruction">Arrastra las respuestas del recuadro a los enunciados correspondientes:<br><b>cationes isótopos número atómico (Z) electrón protón número de masa (A) aniones</b></div>
+            <div class="drag-bank" id="bank-ix">
+                <div class="draggable-item" draggable="true" id="ix-1">cationes</div><div class="draggable-item" draggable="true" id="ix-2">isótopos</div><div class="draggable-item" draggable="true" id="ix-3">número atómico (Z)</div><div class="draggable-item" draggable="true" id="ix-4">electrón</div><div class="draggable-item" draggable="true" id="ix-5">protón</div><div class="draggable-item" draggable="true" id="ix-6">número de masa (A)</div><div class="draggable-item" draggable="true" id="ix-7">aniones</div>
+            </div>
+            <ol>
+                <li style="margin-bottom: 15px;">Los <div class="drop-zone" data-ans="ix-7"></div> son átomos que al combinarse ganan electrones, por lo tanto, tienen carga negativa.</li>
+                <li style="margin-bottom: 15px;">Los <div class="drop-zone" data-ans="ix-1"></div> son átomos que al combinarse pierden electrones, por lo tanto, tienen carga positiva.</li>
+                <li style="margin-bottom: 15px;">El <div class="drop-zone" data-ans="ix-6"></div> es igual al número de protones más el número de neutrones.</li>
+                <li style="margin-bottom: 15px;">El <div class="drop-zone" data-ans="ix-4"></div> es la partícula subatómica con carga eléctrica negativa.</li>
+                <li style="margin-bottom: 15px;">El <div class="drop-zone" data-ans="ix-3"></div> corresponde al número de protones.</li>
+                <li style="margin-bottom: 15px;">El <div class="drop-zone" data-ans="ix-5"></div> es la partícula subatómica con carga positiva.</li>
+                <li style="margin-bottom: 15px;">Los <div class="drop-zone" data-ans="ix-2"></div> son elementos con igual número atómico pero diferente número de masa.</li>
+            </ol>
+        </div>
+
+        <!-- X. ANÁLISIS Sn2+ -->
+        <div class="section">
+            <div class="section-title">X. Análisis del Estaño (Sn²⁺)</div>
+            <div class="sn-analysis-card">
+                <div class="sn-header-box">Símbolo: Sn²⁺ | A=119 | Z=50 | Carga 2+</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                    <div>a. Número de masa (A): <input type="text" data-ans="119" style="font-weight:bold"></div>
+                    <div>b. Número de protones (Z): <input type="text" data-ans="50" style="font-weight:bold"></div>
+                    <div>c. Número de electrones (e⁻): <input type="text" data-ans="48" style="font-weight:bold"></div>
+                    <div>d. Número de neutrones (n): <input type="text" data-ans="69" style="font-weight:bold"></div>
+                </div>
+                <p><strong>e. ¿Catión o anión? ¿Por qué?</strong></p>
+                <textarea data-ans="cation" placeholder="Explica basándote en electrones..." style="height: 70px; margin-bottom: 20px;"></textarea>
+                <p><strong>f. Si se agregan dos protones, transmuta a:</strong></p>
+                <input type="text" data-ans="Te" style="width: 100px; text-transform:uppercase" placeholder="Símbolo">
+                <p><strong>g. Isótopo con 74 neutrones:</strong></p>
+                <div style="display: flex; gap: 30px;">
+                    <span>Z: <input type="text" data-ans="50" style="width: 80px; font-weight:bold"></span>
+                    <span>A: <input type="text" data-ans="124" style="width: 100px; font-weight:bold"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- XI. CONFIGURACIÓN -->
+        <div class="section">
+            <div class="section-title">XI. Configuración Electrónica</div>
+            <div class="instruction">Escribe la configuración completa (usa teclado para exponentes).</div>
+            <table>
+                <tr><th>Átomo/Ion</th><th>Configuración</th><th>Átomo/Ion</th><th>Configuración</th></tr>
+                <tr><td>Al (13)</td><td><input type="text" data-ans="1s²2s²2p⁶3s²3p¹"></td><td>Cs (55)</td><td><input type="text" data-ans="[Xe]6s¹"></td></tr>
+                <tr><td>P³⁻ (18e)</td><td><input type="text" data-ans="1s²2s²2p⁶3s²3p⁶"></td><td>Na⁺ (10e)</td><td><input type="text" data-ans="1s²2s²2p⁶"></td></tr>
+                <tr><td>Se (34)</td><td><input type="text" data-ans="[Ar]4s²3d¹⁰4p⁴"></td><td>O²⁻ (10e)</td><td><input type="text" data-ans="1s²2s²2p⁶"></td></tr>
+            </table>
+        </div>
+
+        <!-- XII. RELACIONA PRINCIPIOS (DRAG & DROP) -->
+        <div class="section">
+            <div class="section-title">XII. Relaciona las columnas (Principios Quánticos)</div>
+            <div class="instruction">Arrastra la opción del banco al espacio correspondiente en cada tarjeta.</div>
+            <div class="drag-bank" id="bank-xii">
+                <div class="draggable-item" draggable="true" id="xii-a">AufBau</div><div class="draggable-item" draggable="true" id="xii-b">n, l, m, s</div><div class="draggable-item" draggable="true" id="xii-c">Hund</div><div class="draggable-item" draggable="true" id="xii-d">s, p, d, f</div><div class="draggable-item" draggable="true" id="xii-e">Pauli</div>
+            </div>
+            <div class="matching-list">
+                <div class="matching-card"><div class="matching-number">1.</div><div class="matching-drop-container">( <div class="drop-zone" data-ans="xii-e"></div> )</div><div class="matching-text">Establece que no puede haber dos electrones con los mismos números cuánticos.</div></div>
+                <div class="matching-card"><div class="matching-number">2.</div><div class="matching-drop-container">( <div class="drop-zone" data-ans="xii-c"></div> )</div><div class="matching-text">Establece que al ir llenando los orbitales de igual energía, los electrones se irán distribuyendo con espines paralelos.</div></div>
+                <div class="matching-card"><div class="matching-number">3.</div><div class="matching-drop-container">( <div class="drop-zone" data-ans="xii-a"></div> )</div><div class="matching-text">El orden de ocupación de orbitales se inicia por aquellos de menor energía a aquellos de mayor energía.</div></div>
+                <div class="matching-card"><div class="matching-number">4.</div><div class="matching-drop-container">( <div class="drop-zone" data-ans="xii-b"></div> )</div><div class="matching-text">Son los números cuánticos.</div></div>
+                <div class="matching-card"><div class="matching-number">5.</div><div class="matching-drop-container">( <div class="drop-zone" data-ans="xii-d"></div> )</div><div class="matching-text">Son los subniveles de energía.</div></div>
+            </div>
+        </div>
+
+        <!-- XIII. RELACIONA PROPIEDADES (DRAG & DROP) -->
+        <div class="section">
+            <div class="section-title">XIII. Relaciona ambas columnas (Propiedades Periódicas)</div>
+            <div class="instruction">Arrastra la definición correcta hacia el concepto periódico correspondiente.</div>
+            <div class="drag-bank" id="bank-xiii">
+                <div class="draggable-item" draggable="true" id="xiii-a">Distancia del núcleo a los e- de valencia</div><div class="draggable-item" draggable="true" id="xiii-b">Energía para quitar el electrón más externo</div><div class="draggable-item" draggable="true" id="xiii-c">Energía al capturar un electrón (formar anión)</div><div class="draggable-item" draggable="true" id="xiii-d">Electrones en los mayores niveles de energía</div><div class="draggable-item" draggable="true" id="xiii-e">Capacidad del átomo para atraer electrones</div>
+            </div>
+            <div class="matching-list">
+                <div class="matching-card"><div class="matching-text"><strong>Electrones de valencia:</strong></div><div class="matching-drop-container"><div class="drop-zone" data-ans="xiii-d" style="min-width: 320px;"></div></div></div>
+                <div class="matching-card"><div class="matching-text"><strong>Electronegatividad:</strong></div><div class="matching-drop-container"><div class="drop-zone" data-ans="xiii-e" style="min-width: 320px;"></div></div></div>
+                <div class="matching-card"><div class="matching-text"><strong>Radio atómico:</strong></div><div class="matching-drop-container"><div class="drop-zone" data-ans="xiii-a" style="min-width: 320px;"></div></div></div>
+                <div class="matching-card"><div class="matching-text"><strong>Energía de ionización:</strong></div><div class="matching-drop-container"><div class="drop-zone" data-ans="xiii-b" style="min-width: 320px;"></div></div></div>
+                <div class="matching-card"><div class="matching-text"><strong>Afinidad electrónica:</strong></div><div class="matching-drop-container"><div class="drop-zone" data-ans="xiii-c" style="min-width: 320px;"></div></div></div>
+            </div>
+        </div>
+
+        <!-- XIV. LEWIS -->
+        <div class="section">
+            <div class="section-title">XIV. Fórmulas de Lewis (e- totales)</div>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <p>CH₄: <input type="text" data-ans="8" style="width: 80px; text-align:center"> e- totales.</p>
+                <p>SO₃: <input type="text" data-ans="24" style="width: 80px; text-align:center"> e- totales.</p>
+                <p>O₂: <input type="text" data-ans="12" style="width: 80px; text-align:center"> e- totales.</p>
+            </div>
+        </div>
+
+        <button class="btn-submit" onclick="evaluateQuiz()">🎯 FINALIZAR Y EVALUAR TODO</button>
+
+        <div id="results-panel">
+            <div class="grade-display" id="finalScore">0%</div>
+            <div class="v-code-container">
+                <p style="margin-top:0; color: #94a3b8; font-size: 0.9rem;">CÓDIGO DE INTEGRIDAD DOCENTE</p>
+                <div class="v-code" id="verifyCode">000-0-0000</div>
+            </div>
+            <p>📸 Captura esta pantalla clara para tu entrega.</p>
+            <button class="download-btn" onclick="downloadReport()" style="background: var(--success); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold;">📥 DESCARGAR REPORTE .TXT</button>
+        </div>
+    </div>
+
+    <div class="keyboard">
+        <button class="key-btn" onclick="insertSymbol('¹')">¹</button><button class="key-btn" onclick="insertSymbol('²')">²</button><button class="key-btn" onclick="insertSymbol('³')">³</button><button class="key-btn" onclick="insertSymbol('⁴')">⁴</button><button class="key-btn" onclick="insertSymbol('⁵')">⁵</button><button class="key-btn" onclick="insertSymbol('⁶')">⁶</button><button class="key-btn" onclick="insertSymbol('⁺')">⁺</button><button class="key-btn" onclick="insertSymbol('⁻')">⁻</button>
+    </div>
+
+    <script>
+        let stats = { pastes: 0, switches: 0, start: Date.now() };
+        let activeInput = null;
+
+        function handlePasteAttempt(e) { stats.pastes++; e.preventDefault(); return false; }
+
+        document.querySelectorAll('.draggable-item').forEach(item => {
+            item.addEventListener('dragstart', (e) => e.dataTransfer.setData('text', e.target.id));
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('drag-over'); });
+            zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                const id = e.dataTransfer.getData('text');
+                const item = document.getElementById(id);
+                if (item) {
+                    if (zone.children.length > 0) {
+                        const bankId = zone.dataset.ans.split('-')[0];
+                        const bank = document.getElementById(`bank-${bankId}`);
+                        if (bank) bank.appendChild(zone.children[0]);
+                    }
+                    zone.appendChild(item);
+                }
+            });
+        });
+
+        document.addEventListener('focusin', (e) => { if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') activeInput = e.target; });
+        window.addEventListener('blur', () => stats.switches++);
+
+        function insertSymbol(sym) {
+            if (!activeInput) return;
+            const start = activeInput.selectionStart;
+            const end = activeInput.selectionEnd;
+            activeInput.value = activeInput.value.substring(0, start) + sym + activeInput.value.substring(end);
+            activeInput.focus();
+        }
+
+        function evaluateQuiz() {
+            const student = document.getElementById('studentName').value.trim();
+            const errorMsg = document.getElementById('name-error');
+            if (!student) { errorMsg.style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+            errorMsg.style.display = 'none';
+
+            let correct = 0, total = 0;
+            const normalize = (s) => (s || "").toLowerCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "");
+
+            try {
+                document.querySelectorAll('input[type="text"][data-ans], select[data-ans], textarea[data-ans]').forEach(el => {
+                    total++;
+                    const user = normalize(el.value);
+                    const answers = el.dataset.ans.split('|').map(normalize);
+                    let isCorrect = el.tagName === 'TEXTAREA' ? (user.includes('cation') || user.includes('pierde')) : answers.includes(user);
+                    if (isCorrect) { correct++; el.classList.add('correct-input'); el.classList.remove('incorrect-input'); }
+                    else { el.classList.add('incorrect-input'); el.classList.remove('correct-input'); }
+                });
+
+                document.querySelectorAll('.drop-zone').forEach(zone => {
+                    total++;
+                    const child = zone.firstElementChild;
+                    if (child && child.id === zone.dataset.ans) { correct++; zone.classList.add('correct-drop'); zone.classList.remove('incorrect-drop'); }
+                    else { zone.classList.add('incorrect-drop'); zone.classList.remove('correct-drop'); }
+                });
+
+                document.querySelectorAll('.row-v').forEach(row => {
+                    total++;
+                    const correctVal = row.dataset.correct;
+                    const selected = row.querySelector(`input[type="radio"]:checked`);
+                    if (selected && selected.value === correctVal) { correct++; row.style.backgroundColor = "#dcfce7"; }
+                    else { row.style.backgroundColor = "#fee2e2"; }
+                });
+
+                const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+                let integrity = Math.max(0, 100 - (stats.pastes * 15) - (stats.switches * 5));
+                const risk = integrity >= 70 ? 0 : (integrity >= 40 ? 1 : 2);
+                const vCode = `${integrity.toString().padStart(3, '0')}-${risk}${Date.now().toString().slice(-4)}`;
+
+                document.getElementById('finalScore').innerText = score + "%";
+                document.getElementById('verifyCode').innerText = vCode;
+                const results = document.getElementById('results-panel');
+                results.style.display = 'block';
+                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (e) { console.error(e); }
+        }
+
+        function downloadReport() {
+            const name = document.getElementById('studentName').value || "Estudiante";
+            const content = `REPORTE MÓDULO 1: ${name}\nNota: ${document.getElementById('finalScore').innerText}\nCódigo: ${document.getElementById('verifyCode').innerText}\nIntegridad: ${document.getElementById('verifyCode').innerText.split('-')[0]}/100`;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `Reporte_Quimica_Mod1_${name.replace(/\s+/g, '_')}.txt`;
+            a.click();
+        }
+    </script>
+</body>
+
+</html>
